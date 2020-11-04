@@ -1,5 +1,4 @@
-let w = [[]];
-let l = [];
+let w = [];
 
 // TODO make input
 
@@ -17,6 +16,7 @@ let fontMinHeight = 100;
 let fontMaxHeight = 500;
 let widest = 500; // TODO test
 let narrowest = 100; // TODO test
+var acc_width = 0;
 // let widest;
 // let narrowest;
 
@@ -42,29 +42,59 @@ function draw() {
 	// 2. turn into array of arrays, create divs for each letter
 	// for latin - remove .reverse()*2
 	// TODO make an array of divz?
-	w.reverse().forEach((word, index) => {
-		w[index] = word.split('');
-		w[index].reverse().forEach((letter, lIndex) => {
-			divName = ((index * wordLenght) + lIndex).toString();
+	w.reverse().forEach((word, w_index) => {
+		w[w_index] = word.split('');
+		w[w_index].reverse().forEach((letter, l_index) => {
+			div_index = (w_index * wordLenght) + l_index
+			divName = div_index.toString();
 			var divName = createDiv(letter).id(divName);
+			// 3. create Letter object for each letter
+			// lw = random(logowidth * 0.1,logowidth * 0.4);
+			// lh = random(logoheight * 0.1, logoheight * 0.8);
+			lw = 50;
+			lh = 50;
+			acc_width += lw;
+			y = margins;
+			x = width - margins - acc_width;
+
+			let wU, hU;
+			if (w_index == 1){
+				if (l_index == 0){
+					// console.log(acc_width);
+					acc_width = 0;
+
+				}
+				console.log(acc_width);
+				letter_up = (w_index * wordLenght) - l_index;
+				// console.log(letter_up);
+				// console.log(l_index);
+				// console.log(select('#'+letter_up).size());
+				wU, hU = select('#' + letter_up.toString()).size();
+				acc_width += wU;
+				y += hU;
+				x = width - margins - acc_width;
+			}
+
+			// l1 = new Letter(width-l1w-margins, margins, l1w, l1h, color('rgb(0,0,255)'), a);
+			// l5 = new Letter(width-l1w-margins, margins+l1h, l5w, l5h, color('rgb(100,0,100)'), e);
+
+
+			// let l = new Letter(50*div_index, 50, 50, 50, color('rgb(255,0,255)'), divName);
+			let l = new Letter(x, y, 50, 50, color('rgb(255,0,255)'), divName);
+			l.display();
 		});
 	});
 
-	// 3. create Letter object for each letter, calling div;
-	for (let i = 0; i < displayText.length-1 ; i++) {
-		let tmp = new Letter(50*i, 50, 50, 50, color('rgb(0,0,255)'), select('#'+(i.toString())));
-		tmp.display();
-		// keeping here for maybe later:
-		// bounds = font.textBounds(select('#'+(i.toString())).html(), 0, 0, fontsize);
-		// console.log(bounds, bounds.w , bounds.h);
-	}
+	// keeping here for maybe later:
+	// bounds = font.textBounds(select('#'+(i.toString())).html(), 0, 0, fontsize);
+	// console.log(bounds, bounds.w , bounds.h);
 
-	//TODO - word per row via space char
+		//TODO - word per row via space char
 
-	// TODO:
-	// Dail back on the random.
-	// randomize select one letter to grow (not 2,6)
-	// all the rest - stay in place.
+		// TODO:
+		// Dail back on the random.
+		// randomize select one letter to grow (not 2,6)
+		// all the rest - stay in place.
 
 	//
 	// // first word , LTR!
