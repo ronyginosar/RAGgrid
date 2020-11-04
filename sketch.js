@@ -35,33 +35,12 @@ function setup() {
 
 function draw() {
 	background(bg);
-
+	// 1. input text to array
 	w = displayText.split(' ').slice();//.reverse() // for latin - remove ".slice().reverse()"
-	// console.log(w);
-
 	wordLenght = w[0].length;
 
-	// test indx creation:
-	// divIndex = Array.from(Array(displayText.length).keys());
-	// for(i=9,a='';++i<36;)a+=i.toString(36);
-	// console.log(divIndex);
-
-	// w.forEach((word, index) => {
-	// 	// console.log(word);
-	// 	l.push(word.split(''));
-	// 	// console.log(l[index]);
-	// 	l[index].slice().reverse().forEach((letter, lIndex) => { // for latin - remove ".slice().reverse()"
-	// 		// divName = ((index+1)*(lIndex+1));
-	// 		divName = ((index*6)+lIndex).toString();
-	// 		// console.log(divName);
-	// 		// TODO make an array of divz?
-	// 		var divName = createDiv(letter).id(divName);
-	// 		// console.log(divName);
-	// 	});
-	// });
-
-	// Is there actual need for two DaSt?
-	// for latin - remove .reverse()
+	// 2. turn into array of arrays, create divs for each letter
+	// for latin - remove .reverse()*2
 	// TODO make an array of divz?
 	w.reverse().forEach((word, index) => {
 		w[index] = word.split('');
@@ -70,17 +49,14 @@ function draw() {
 			var divName = createDiv(letter).id(divName);
 		});
 	});
-	// console.log(w);
 
-	// var i;
+	// 3. create Letter object for each letter, calling div;
 	for (let i = 0; i < displayText.length-1 ; i++) {
-		// console.log(i);
-		// console.log(select('#'+(i.toString())));
-		// bounds = font.textBounds(select('#'+(i.toString())).html(), 0, 0, fontsize);
-		// console.log(bounds, bounds.w , bounds.h);
 		let tmp = new Letter(50*i, 50, 50, 50, color('rgb(0,0,255)'), select('#'+(i.toString())));
 		tmp.display();
-		// console.log(i);
+		// keeping here for maybe later:
+		// bounds = font.textBounds(select('#'+(i.toString())).html(), 0, 0, fontsize);
+		// console.log(bounds, bounds.w , bounds.h);
 	}
 
 	//TODO - word per row via space char
