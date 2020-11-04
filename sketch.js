@@ -53,27 +53,29 @@ function draw() {
 			// lh = random(logoheight * 0.1, logoheight * 0.8);
 			lw = 50;
 			lh = 50;
-			acc_width += lw;
 			y = margins;
-			x = width - margins - acc_width;
-
-			let wU, hU;
+			x = margins + acc_width; // was x = width - margins - acc_width;
+			acc_width += lw; // TODO how to update this? with inner loop
 			if (w_index == 1){
 				if (l_index == 0){
-					// console.log(acc_width);
 					acc_width = 0;
-
 				}
-				console.log(acc_width);
-				letter_up = (w_index * wordLenght) - l_index;
+				// letter_up = ((w_index-1) * wordLenght) - l_index; // first part is just in case we want more words latter
+				letter_up = l_index; // first part is just in case we want more words latter
+				// letter_up = l_index;
 				// console.log(letter_up);
 				// console.log(l_index);
-				// console.log(select('#'+letter_up).size());
-				wU, hU = select('#' + letter_up.toString()).size();
-				acc_width += wU;
-				y += hU;
-				x = width - margins - acc_width;
+				// console.log("letter up ", select('#'+letter_up).html());
+				upperSize = select('#' + letter_up.toString()).size();
+				// console.log(upperSize.width , upperSize.height);
+				y += upperSize.height;
+				x = margins + acc_width; // was: x = width - margins - acc_width;
+				// acc_width += upperSize.width;
+				// TODO - how to update by upperSize.width
+
 			}
+			// console.log("after after", acc_width);
+
 
 			// l1 = new Letter(width-l1w-margins, margins, l1w, l1h, color('rgb(0,0,255)'), a);
 			// l5 = new Letter(width-l1w-margins, margins+l1h, l5w, l5h, color('rgb(100,0,100)'), e);
@@ -82,6 +84,7 @@ function draw() {
 			// let l = new Letter(50*div_index, 50, 50, 50, color('rgb(255,0,255)'), divName);
 			let l = new Letter(x, y, 50, 50, color('rgb(255,0,255)'), divName);
 			l.display();
+			console.log(divName.html() , "x " , x, "y ", y);
 		});
 	});
 
