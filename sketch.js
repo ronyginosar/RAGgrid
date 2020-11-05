@@ -2,7 +2,9 @@ let w = [];
 
 // TODO make input
 
-let displayText = "מערכות משטחים"
+// let displayText = "מערכות משטחים"
+// let displayText = "abcdef ghijkl";
+let displayText = "abcief ghdjkl".toUpperCase();
 
 let bg;
 // let font;
@@ -19,6 +21,11 @@ let narrowest = 100; // TODO test
 var acc_width = 0;
 // let widest;
 // let narrowest;
+
+let testcolors = ['rgb(0,0,255)', 'rgb(0,200,255)', 'rgb(100,200,100)',
+	'rgb(255,200,100)', 'rgb(100,0,100)', 'rgb(255,200,0)', 'rgb(255,0,100)',
+	'rgb(255,50,50)' , 'rgb(0,100,255)', 'rgb(100,0,255)', 'rgb(200,0,200)',
+	'rgb(200,100,0)'] ;
 
 // function preload() {
 // 	// NOTE: This is only for text bounds calc. the actual font is in css
@@ -42,6 +49,7 @@ function draw() {
 	// 2. turn into array of arrays, create divs for each letter
 	// for latin - remove .reverse()*2
 	// TODO make an array of divz?
+	// todo
 	w.reverse().forEach((word, w_index) => {
 		w[w_index] = word.split('');
 		w[w_index].reverse().forEach((letter, l_index) => {
@@ -50,41 +58,71 @@ function draw() {
 			var divName = createDiv(letter).id(divName);
 			// 3. create Letter object for each letter
 			// lw = random(logowidth * 0.1,logowidth * 0.4);
-			// lh = random(logoheight * 0.1, logoheight * 0.8);
+			// lh = random(logoheight * 0.1, logoheight * 0.4);
 			lw = 50;
 			lh = 50;
-			y = margins;
-			x = margins + acc_width; // was x = width - margins - acc_width;
-			acc_width += lw; // TODO how to update this? with inner loop
-			if (w_index == 1){
-				if (l_index == 0){
-					acc_width = 0;
-				}
-				// letter_up = ((w_index-1) * wordLenght) - l_index; // first part is just in case we want more words latter
-				letter_up = l_index; // first part is just in case we want more words latter
-				// letter_up = l_index;
-				// console.log(letter_up);
-				// console.log(l_index);
-				// console.log("letter up ", select('#'+letter_up).html());
-				upperSize = select('#' + letter_up.toString()).size();
-				// console.log(upperSize.width , upperSize.height);
-				y += upperSize.height;
-				x = margins + acc_width; // was: x = width - margins - acc_width;
-				// acc_width += upperSize.width;
-				// TODO - how to update by upperSize.width
+			y = margins; // 1st row height
+			// x = margins + acc_width; // was x = width - margins - acc_width;
+			// acc_width += lw; // TODO how to update this? with inner loop
 
+			if (w_index == 0 && l_index != 0){
+				// // lw update according to prev letter
+				// lw = select('#' + (l_index-1).toString()).size().width;
+				// console.log("letter before w" , lw);
+				// // remove curr letter width
+				// lw -= divName.size().width;
+
+				// lw update according to prev letter
+				// TODO actuall need to update acc_width?
+				acc_width += select('#' + (l_index-1).toString()).size().width;
+				// console.log("letter before w" , select('#' + (l_index-1).toString()).size().width);
+
+				// TODO:  for HEBREW
+				// remove curr letter width
+				// lw -= divName.size().width;
+				// TODO:  lw += random()
+				//// TODO:
+				// l3w = random(logowidth * 0.1, min((logowidth - l1w - l2w) * 0.5,logowidth * 0.35));
+				// console.log("curr letter" , divName.size().width);
 			}
-			// console.log("after after", acc_width);
+
+			if (w_index >= 1){ // ammend params for later rows
+				// if (l_index == 0){ acc_width = 0; } // TODO move to end?
+				// y, lw update according to prev row
+				letter_up = abs(((w_index-1) * wordLenght) - l_index); // first part is just in case we want more words latter
+				upperSize = select('#' + letter_up.toString()).size();
+				console.log("UP", upperSize.width , upperSize.height);
+				y += upperSize.height;
+				lw = upperSize.width;
+				// acc_width += lw;
+
+				if (l_index == 0){ acc_width = 0; }
+				else {
+					acc_width += select('#' + (l_index-1).toString()).size().width;
+				} // TODO move to end?
+			}
+			// console.log("current acc_width", acc_width);
+			// x = margins + acc_width; // was x = width - margins - acc_width;
+
+			x = margins + acc_width; // was x = width - margins - acc_width;
 
 
-			// l1 = new Letter(width-l1w-margins, margins, l1w, l1h, color('rgb(0,0,255)'), a);
-			// l5 = new Letter(width-l1w-margins, margins+l1h, l5w, l5h, color('rgb(100,0,100)'), e);
+			// acc_width += lw; // TODO how to update this? with inner loop
+
+			// if (l_index != 0){
+			// 	acc_width += lw;
+			// }
+
+			//todo actually i need to go one before for each letter
 
 
-			// let l = new Letter(50*div_index, 50, 50, 50, color('rgb(255,0,255)'), divName);
-			let l = new Letter(x, y, 50, 50, color('rgb(255,0,255)'), divName);
+
+			// x = margins + acc_width; // was x = width - margins - acc_width;
+			// x = margins + acc_width; // was x = width - margins - acc_width;
+			let l = new Letter(int(x), int(y), int(lw), int(lh), color(testcolors[div_index]), divName);
 			l.display();
-			console.log(divName.html() , "x " , x, "y ", y);
+			console.log(divName.html() , "w" , lw, "h", lh);
+			// console.log(divName.html() , "x " , x, "y ", y);
 		});
 	});
 
