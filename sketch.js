@@ -63,7 +63,7 @@ function draw() {
 			var divName = createDiv(letter).id(divName);
 			// 3. create Letter object for each letter
 
-			lw = int(random(logowidth * 0.1,logowidth * 0.5));
+			lw = int(random(logowidth * 0.1,logowidth * 0.4));
 			// lh = random(logoheight * 0.1, logoheight * 0.4);
 			// lw = 50;
 			lh = 50;
@@ -84,7 +84,7 @@ function draw() {
 				// TODO : soth this logic!
 				// TODO: should be relyant on fontsize, not logowidth
 				minw = logowidth * 0.1 ;
-				maxw = max((logowidth - acc_width) * 0.5, logowidth * 0.1);
+				maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 
 				lw = int(random(minw, maxw));
