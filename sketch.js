@@ -3,14 +3,16 @@ let w = [];
 // TODO make input
 
 // let displayText = "מערכות משטחים"
-// let displayText = "abcdef ghijkl";
-let displayText = "abcief ghdjkl".toUpperCase();
+let displayText = "abcief ghdjkl";
+// let displayText = "abcief ghdjkl".toUpperCase();
 
 let bg;
 // let font;
-let logowidth = 400;
-let logoheight = 350;
-let margins = 50;
+let logowidth;
+let logoheight;
+// let logowidth = 400;
+// let logoheight = 350;
+let margins = 10;
 // Font settings
 let fontMinWidth = 100;
 let fontMaxWidth = 500;
@@ -19,6 +21,7 @@ let fontMaxHeight = 500;
 let widest = 500; // TODO test
 let narrowest = 100; // TODO test
 var acc_width = 0;
+let minwidth = 50;
 // let widest;
 // let narrowest;
 
@@ -33,10 +36,12 @@ let testcolors = ['rgb(0,0,255)', 'rgb(0,200,255)', 'rgb(100,200,100)',
 // }
 
 function setup() {
-	// createCanvas(windowWidth, windowHeight);
-	createCanvas(logowidth + margins * 2,logoheight + margins * 2);
-	// bg = color('rgb(0,0,0)');
-	bg = color('rgb(255,255,255)');
+	createCanvas(windowWidth, windowHeight);
+	logoheight = windowHeight - margins*2;
+	logowidth = windowWidth - margins*2;
+	// createCanvas(logowidth + margins * 2,logoheight + margins * 2);
+	bg = color('rgb(0,0,0)');
+	// bg = color('rgb(255,255,255)');
 	frameRate(1);
 }
 
@@ -57,9 +62,10 @@ function draw() {
 			divName = div_index.toString();
 			var divName = createDiv(letter).id(divName);
 			// 3. create Letter object for each letter
-			// lw = random(logowidth * 0.1,logowidth * 0.4);
+
+			lw = int(random(logowidth * 0.1,logowidth * 0.5));
 			// lh = random(logoheight * 0.1, logoheight * 0.4);
-			lw = 50;
+			// lw = 50;
 			lh = 50;
 			y = margins; // 1st row height
 
@@ -72,16 +78,24 @@ function draw() {
 				// remove curr letter width
 				// lw -= divName.size().width;
 
-				// TODO: lw += random()
-				// TODO: update lw regarding other letters before
-				// l3w = random(logowidth * 0.1, min((logowidth - l1w - l2w) * 0.5,logowidth * 0.35));
+				// TODO: lw += random(), only relevant in first row hence here
+				// update lw regarding other letters before
+				// TODO: is there a way to not write this double?
+				// TODO : soth this logic!
+				// TODO: should be relyant on fontsize, not logowidth
+				minw = logowidth * 0.1 ;
+				maxw = max((logowidth - acc_width) * 0.5, logowidth * 0.1);
+				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
+
+				lw = int(random(minw, maxw));
+				console.log(int(minw) , int(maxw), lw);
 			}
 
 			if (w_index >= 1){ // ammend params for later rows
 				// y, lw update according to prev row
 				letter_up = abs(((w_index-1) * wordLenght) - l_index); // first part is just in case we want more words latter
 				upperSize = select('#' + letter_up.toString()).size();
-				console.log("UP", upperSize.width , upperSize.height); // TEST PRINTS
+				// console.log("UP", upperSize.width , upperSize.height); // TEST PRINTS
 				y += upperSize.height;
 				lw = upperSize.width;
 				// update acc_width or init it for new row
@@ -97,7 +111,7 @@ function draw() {
 			l.display();
 
 			// TEST PRINTS
-			console.log(divName.html() , "w" , lw, "h", lh);
+			// console.log(divName.html() , "w" , lw, "h", lh);
 			// console.log(divName.html() , "x " , x, "y ", y);
 		});
 	});
@@ -115,13 +129,13 @@ function draw() {
 	// narrowest = int(min(l1w, l2w, l3w, l4w));
 	//
 	// TODO: here do animate
-	noLoop();
+	// noLoop();
 
 	// ----
 	// Export to SVG
 	// save("mySVG.svg"); // give file name
 	// print("saved svg");
-	// noLoop(); // we just want to export once
+	noLoop(); // we just want to export once
 
 }
 
@@ -141,9 +155,9 @@ class Letter {
 
 	display(){
 		// test:
-		noStroke();
-		fill(this.c);
-		rect(this.x, this.y, this.w, this.h);
+		// noStroke();
+		// fill(this.c);
+		// rect(this.x, this.y, this.w, this.h);
 
 
 		// control DOM letters
@@ -151,7 +165,7 @@ class Letter {
 		// this.div.style('height', this.h +'px');
 		// this.div.style('line-height', this.h*0.37 +'px');
 		this.div.style('line-height', this.h +'px');
-		// this.div.style('width', this.w +'px');
+		this.div.style('width', this.w +'px');
 		this.div.style('font-size', this.h +'px'); //this.h * 0.75;
 		// this.div.style('font-size', this.h*1.35 +'px'); //this.h * 0.75;
 
@@ -162,7 +176,7 @@ class Letter {
 		this.div.style('font-variation-settings', wmap);
 		// this.div.style('vertical-align','top');
 		this.div.style('color', 'white');
-		// this.div.style('background', this.c); // if i use rect and not bg - all fits
+		this.div.style('background', this.c);
 		// this.div.style('color', "white");
 		// this.div.style('background', 'black');
 		this.div.position(this.x, this.y);
