@@ -54,7 +54,6 @@ function draw() {
 	// 2. turn into array of arrays, create divs for each letter
 	// for latin - remove .reverse()*2
 	// TODO make an array of divz?
-	// todo
 	w.reverse().forEach((word, w_index) => {
 		w[w_index] = word.split('');
 		w[w_index].reverse().forEach((letter, l_index) => {
@@ -81,14 +80,19 @@ function draw() {
 				// TODO: lw += random(), only relevant in first row hence here
 				// update lw regarding other letters before
 				// TODO: is there a way to not write this double?
-				// TODO : soth this logic!
+				// TODO : sort this logic!
 				// TODO: should be relyant on fontsize, not logowidth
-				minw = logowidth * 0.1 ;
+				minw = logowidth * 0.05 ;
 				maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 
 				lw = int(random(minw, maxw));
-				console.log(int(minw) , int(maxw), lw);
+				// console.log(int(minw) , int(maxw), lw);
+
+				// last letter width fills to the end of logosize:
+				if(l_index == wordLenght-1){
+					lw = (logowidth - acc_width);
+				}
 			}
 
 			if (w_index >= 1){ // ammend params for later rows
