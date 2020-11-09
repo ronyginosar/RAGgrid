@@ -61,25 +61,25 @@ function draw() {
 			divName = div_index.toString();
 			var divName = createDiv(letter).id(divName);
 			// 3. create Letter object for each letter
-
-			lw = int(random(logowidth * 0.1,logowidth * 0.4));
+			
 			// lh = random(logoheight * 0.1, logoheight * 0.4);
-			// lw = 50;
 			lh = 50;
 			y = margins; // 1st row height
 
-			if (w_index == 0 && l_index != 0){
+			if (w_index == 0){ //} && l_index != 0){
 
-				// acc_width update according to prev letter
-				acc_width += select('#' + (l_index-1).toString()).size().width;
+				if (l_index != 0){
+					// acc_width update according to prev letter
+					acc_width += select('#' + (l_index-1).toString()).size().width;
+				}
 
 				// TODO: for HEBREW ??
 				// remove curr letter width
 				// lw -= divName.size().width;
 
-				// TODO: lw += random(), only relevant in first row hence here
 				// update lw regarding other letters before
-				// TODO: is there a way to not write this double?
+				// only relevant in first row hence here
+
 				// TODO : sort this logic!
 				// TODO: should be relyant on fontsize, not logowidth
 				minw = logowidth * 0.05 ;
