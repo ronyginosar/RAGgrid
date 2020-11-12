@@ -2,8 +2,8 @@ var w = [];
 var letterDivz = [];
 
 // let displayText = "מערכות משטחים"
-let displayText = "abcief ghdjkl";
-// let displayText = "abcief ghdjkl".toUpperCase();
+// let displayText = "abcief ghdjkl";
+let displayText = "abcief ghdjkl".toUpperCase();
 
 let bg;
 // let font;
@@ -13,8 +13,10 @@ var logoheight;
 // let logoheight = 350;
 let margins = 10;
 // Font settings
-let fontMinWidth = 100;
-let fontMaxWidth = 500;
+let fontMinWidth = 1;
+let fontMaxWidth = 150;
+// let fontMinWidth = 100;
+// let fontMaxWidth = 500;
 let fontMinHeight = 100;
 let fontMaxHeight = 500;
 // Font changing global vars
@@ -64,12 +66,6 @@ function setup() {
 	w.forEach((word) => {
 		letterDivz.push([]);
 	});
-}
-
-function draw() {
-	// inits for every loop
-	background(bg);
-	widthList = [];
 
 	// 2. turn into array of arrays, create divs for each letter
 	// for latin - remove .reverse()*2
@@ -84,6 +80,26 @@ function draw() {
 			letterDivz[w_index][l_index] = divL;
 		});
 	});
+}
+
+function draw() {
+	// inits for every loop
+	background(bg);
+	widthList = [];
+
+	// // 2. turn into array of arrays, create divs for each letter
+	// // for latin - remove .reverse()*2
+	// // TODO make an array of divz?
+	// // TODO - should the div creation happen in setup and just update sizes?
+	// w.reverse().forEach((word, w_index) => {
+	// 	w[w_index] = word.split('');
+	// 	w[w_index].reverse().forEach((letter, l_index) => {
+	// 		div_index = (w_index * wordLenght) + l_index
+	// 		divName = div_index.toString();
+	// 		var divL = createDiv(letter).id(divName);
+	// 		letterDivz[w_index][l_index] = divL;
+	// 	});
+	// });
 
 	// 3. create Letter object for each letter
 	w.reverse().forEach((word, w_index) => {

@@ -19,6 +19,13 @@
   font-weight: 100 500;
 }
 
+@font-face {
+  font-family: 'Gingham';
+  src: url('assets/Gingham.woff2');
+   /* format("truetype-variations"); */
+  font-weight: 1 150;
+}
+
 
 
 
@@ -33,7 +40,7 @@ canvas {
 }
 
 div {
-  font-family: 'MaromVar';
+  font-family: 'Gingham';
   text-align: center;
   display: inline-block;
   /* vertical-align: top; */
