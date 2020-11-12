@@ -23,6 +23,8 @@ let fontMaxHeight = 500;
 // var widest;
 // var narrowest;
 // var widthList = [];
+var minw;
+var maxw;
 var acc_width = 0;
 var wordLenght;
 // let minwidth = 50;
@@ -40,18 +42,23 @@ let testcolors = ['rgb(0,0,255)', 'rgb(0,200,255)', 'rgb(100,200,100)',
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
+	// canvas = createCanvas(window.innerWidth, window.innerHeight);
 	logoheight = windowHeight - margins*2;
 	// TODO : how to mapping in low tech?
 
+	// TODO?:
 	maxlogowidth = windowWidth - margins*2;
 	logowidth = int(maxlogowidth);///fontMaxWidth);
 	// console.log(logowidth);
 	// logowidth = windowWidth/fontMaxWidth * 6 ; // windowWidth - margins*2;
 	// let scale = (fontMaxWidth * 6 ) / (windowWidth - margins*2);
 	// // console.log(windowWidth , (fontMaxWidth * 6 ) / scale );
-	// logowidth = (fontMaxWidth * 6 ) / scale ;
+	// logowidth = (fontMaxWidth * 6) ;
+	// console.log(windowWidth , logowidth );
 
-	// createCanvas(logowidth + margins * 2,logoheight + margins * 2);
+	minw = logowidth * 0.05;
+	maxw = logowidth * 0.4;
+
 	bg = color('rgb(0,0,0)');
 	// bg = color('rgb(255,255,255)');
 	frameRate(1);
@@ -69,8 +76,6 @@ function setup() {
 
 	// 2. turn into array of arrays, create divs for each letter
 	// for latin - remove .reverse()*2
-	// TODO make an array of divz?
-	// TODO - should the div creation happen in setup and just update sizes?
 	w.reverse().forEach((word, w_index) => {
 		w[w_index] = word.split('');
 		w[w_index].reverse().forEach((letter, l_index) => {
@@ -84,44 +89,28 @@ function setup() {
 
 function draw() {
 	// inits for every loop
-	background(bg);
+	// background(bg);
+	rect(10,10,logowidth,logoheight);
 	widthList = [];
-
-	// // 2. turn into array of arrays, create divs for each letter
-	// // for latin - remove .reverse()*2
-	// // TODO make an array of divz?
-	// // TODO - should the div creation happen in setup and just update sizes?
-	// w.reverse().forEach((word, w_index) => {
-	// 	w[w_index] = word.split('');
-	// 	w[w_index].reverse().forEach((letter, l_index) => {
-	// 		div_index = (w_index * wordLenght) + l_index
-	// 		divName = div_index.toString();
-	// 		var divL = createDiv(letter).id(divName);
-	// 		letterDivz[w_index][l_index] = divL;
-	// 	});
-	// });
 
 	// 3. create Letter object for each letter
 	w.reverse().forEach((word, w_index) => {
 		w[w_index].reverse().forEach((letter, l_index) => {
-			div_index = (w_index * wordLenght) + l_index;
-			// divName = div_index.toString();
+			div_index = (w_index * wordLenght) + l_index; // test
 			divL = letterDivz[w_index][l_index];
 
-			// select('#' + (l_index-1).toString());
-			// console.log(divL);
-
-
 			// lh = random(logoheight * 0.1, logoheight * 0.4);
-			lh = 50;
+			lh = 150;
 			y = margins; // 1st row height
+			upperw = null;
 
 			if (w_index == 0){ //} && l_index != 0){
 
 				if (l_index != 0){
 					// acc_width update according to prev letter
-					// print(select('#' + (l_index-1).toString()).size().width);
-					acc_width += select('#' + (l_index-1).toString()).size().width;
+					// console.log(select('#' + (l_index-1).toString()).size().width);
+					// acc_width += select('#' + (l_index-1).toString()).size().width;
+					acc_width += letterDivz[w_index][l_index-1].size().width;
 				}
 				// TODO is there a letter that is too narow to stretch?
 				// exclude it
@@ -132,11 +121,10 @@ function draw() {
 				// TODO: should be relyant on fontsize, not logowidth
 				// TODO: how to do smarter?
 				minw = logowidth * 0.05 ;
-				maxw = max((logowidth - acc_width) * 0.2, logowidth * 0.1);
+				maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 
 				lw = int(random(minw, maxw));
-
 
 				// last letter width fills to the end of logosize:
 				if(l_index == wordLenght-1){
@@ -152,22 +140,29 @@ function draw() {
 
 			if (w_index >= 1){ // ammend params for later rows
 				// y, lw update according to prev row
-				letter_up = abs(((w_index-1) * wordLenght) - l_index); // first part is just in case we want more words latter
-				upperSize = select('#' + letter_up.toString()).size();
-				// console.log("indise UPPER", upperSize.width); // TEST PRINTS
+				upperSize = letterDivz[w_index-1][l_index].size();
+				// letter_up = abs(((w_index-1) * wordLenght) - l_index); // first part is just in case we want more words latter
+				// upperSize = select('#' + letter_up.toString()).size();
+				// upperSize = select('#' + letter_up.toString()).size();
+
+				// console.log("indise UPPER", letterDivz[w_index-1][l_index].html() ,upperSize.width); // TEST PRINTS
 				y += upperSize.height;
 				lw = upperSize.width;
+				upperw = letterDivz[w_index-1][l_index].style("font-variation-settings");
+				// console.log("indise UPPER", letterDivz[w_index-1][l_index].html() ,upperw); // TEST PRINTS
+
 
 				// update acc_width or init it for new row
 				if (l_index == 0){ acc_width = 0; }
 				else {
-					acc_width += select('#' + (l_index-1).toString()).size().width;
+					acc_width += letterDivz[w_index-1][l_index-1].size().width;
+					// acc_width += select('#' + (l_index-1).toString()).size().width;
 				}
 			}
 			x = margins + acc_width;
 
 			// console.log("inside builder" , int(lw));
-			let l = new Letter(int(x), int(y), int(lw), int(lh), color(testcolors[div_index]), divL);
+			let l = new Letter(int(x), int(y), int(lw), int(lh), color(testcolors[div_index]), divL, upperw);
 			l.display();
 
 		});
@@ -205,13 +200,14 @@ function draw() {
 }
 
 class Letter {
-	constructor(ix, iy, iw, ih, ic, d){
+	constructor(ix, iy, iw, ih, ic, d, vw){
 		this.x = ix; // location
 		this.y = iy;
 		this.w = iw; // size
 		this.h = ih;
 		this.c = ic; // color
 		this.div = d; // div container
+		this.varwdth = vw; // variable wdth value
 	}
 
 	animate(){
@@ -232,13 +228,19 @@ class Letter {
 		this.div.style('color', 'white'); // test
 		this.div.style('background', this.c); // test
 
-		// map w to variable width
-		minw = logowidth * 0.05;
-		maxw = logowidth * 0.4;
-		// console.log("inside letter" , this.w); // TEST
-		let wmap = map(this.w,int(minw),int(maxw),fontMinWidth,fontMaxWidth,true);
-		wmap = "'wdth'"+' '+ int(wmap).toString();
-		this.div.style('font-variation-settings', wmap);
+		if (this.varwdth == null){
+			// map w to variable width
+			// console.log("inside letter" , this.w); // TEST
+			// let wmap = map(this.w,int(minw),int(maxw),fontMinWidth,fontMaxWidth,true);
+			let wmap = map(this.w,int(minw),int(maxw),fontMinWidth,fontMaxWidth,true);
+			wmap = "'wdth'"+' '+ int(wmap).toString();
+			this.div.style('font-variation-settings', wmap);
+		} else if (this.varwdth) {
+			// console.log(this.varwdth);
+			this.div.style('font-variation-settings', this.varwdth);
+			this.div.style('width', this.w +'px'); // fill up rest of upper width
+		}
+
 	}
 // end of Letter class
 }

@@ -37,6 +37,7 @@ body {
 }
 canvas {
   margin:auto;
+  /* direction: rtl; */
 }
 
 div {
