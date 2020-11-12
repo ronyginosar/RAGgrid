@@ -1,17 +1,12 @@
-var w = [];
-var letterDivz = [];
-
 // let displayText = "מערכות משטחים"
 // let displayText = "abcief ghdjkl";
 let displayText = "abcief ghdjkl".toUpperCase();
 
 let bg;
-// let font;
+let margins = 10;
 var logowidth;
 var logoheight;
-// let logowidth = 400;
-// let logoheight = 350;
-let margins = 10;
+
 // Font settings
 let fontMinWidth = 1;
 let fontMaxWidth = 150;
@@ -19,36 +14,30 @@ let fontMaxWidth = 150;
 // let fontMaxWidth = 500;
 let fontMinHeight = 100;
 let fontMaxHeight = 500;
+
 // Font changing global vars
-// var widest;
-// var narrowest;
-// var widthList = [];
-var minw;
-var maxw;
+var minDivWidth;
+var maxDivWidth;
 var acc_width = 0;
 var wordLenght;
-// let minwidth = 50;
+var w = [];
+var letterDivz = [];
 
-
+// test
 let testcolors = ['rgb(0,0,255)', 'rgb(0,200,255)', 'rgb(100,200,100)',
 	'rgb(255,200,100)', 'rgb(100,0,100)', 'rgb(255,200,0)', 'rgb(255,0,100)',
 	'rgb(255,50,50)' , 'rgb(0,100,255)', 'rgb(100,0,255)', 'rgb(200,0,200)',
 	'rgb(200,100,0)'] ;
 
-// function preload() {
-// 	// NOTE: This is only for text bounds calc. the actual font is in css
-//   font = loadFont('assets/RAG-Marom-Roni01GX.ttf');
-// }
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-	// canvas = createCanvas(window.innerWidth, window.innerHeight);
 	logoheight = windowHeight - margins*2;
 	// TODO : how to mapping in low tech?
 
 	// TODO?:
 	maxlogowidth = windowWidth - margins*2;
-	logowidth = int(maxlogowidth);///fontMaxWidth);
+	logowidth = int(maxlogowidth);
 	// console.log(logowidth);
 	// logowidth = windowWidth/fontMaxWidth * 6 ; // windowWidth - margins*2;
 	// let scale = (fontMaxWidth * 6 ) / (windowWidth - margins*2);
@@ -56,20 +45,19 @@ function setup() {
 	// logowidth = (fontMaxWidth * 6) ;
 	// console.log(windowWidth , logowidth );
 
-	minw = logowidth * 0.05;
-	maxw = logowidth * 0.4;
+	minDivWidth = logowidth * 0.05;
+	maxDivWidth = logowidth * 0.6;
 
-	bg = color('rgb(0,0,0)');
-	// bg = color('rgb(255,255,255)');
+	// bg = color('rgb(0,0,0)');
+	bg = color('rgb(255,255,255)');
 	frameRate(1);
 
 	// 1. input text to array, word per row via space char
-	w = displayText.split(' ').slice();//.reverse() // for latin - remove ".slice().reverse()"
-	wordLenght = w[0].length;
 	// TODO make input
+	w = displayText.split(' ').slice();
+	wordLenght = w[0].length;
 
 	// init div array of arrays, according to amnt of words
-	// letterDivz.push([],[]);
 	w.forEach((word) => {
 		letterDivz.push([]);
 	});
@@ -85,6 +73,7 @@ function setup() {
 			letterDivz[w_index][l_index] = divL;
 		});
 	});
+	// end of setup
 }
 
 function draw() {
@@ -108,8 +97,6 @@ function draw() {
 
 				if (l_index != 0){
 					// acc_width update according to prev letter
-					// console.log(select('#' + (l_index-1).toString()).size().width);
-					// acc_width += select('#' + (l_index-1).toString()).size().width;
 					acc_width += letterDivz[w_index][l_index-1].size().width;
 				}
 				// TODO is there a letter that is too narow to stretch?
@@ -120,63 +107,40 @@ function draw() {
 
 				// TODO: should be relyant on fontsize, not logowidth
 				// TODO: how to do smarter?
-				minw = logowidth * 0.05 ;
-				maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
+				minw = logowidth * 0.01 ;
+				// maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
+				maxw = (logowidth - acc_width) * 0.6;
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 
 				lw = int(random(minw, maxw));
 
 				// last letter width fills to the end of logosize:
-				if(l_index == wordLenght-1){
-					lw = (logowidth - acc_width);
-				}
+				// if(l_index == wordLenght-1){
+				// 	lw = (logowidth - acc_width);
+				// }
 
-
-				// console.log("max varz:", (logowidth - acc_width) * 0.2, logowidth * 0.1);
-				// console.log(int(minw), int(maxw), lw);
-
-				// widthList.push(lw);
+				console.log(int(minw), int(maxw), lw);
 			}
 
 			if (w_index >= 1){ // ammend params for later rows
 				// y, lw update according to prev row
 				upperSize = letterDivz[w_index-1][l_index].size();
-				// letter_up = abs(((w_index-1) * wordLenght) - l_index); // first part is just in case we want more words latter
-				// upperSize = select('#' + letter_up.toString()).size();
-				// upperSize = select('#' + letter_up.toString()).size();
-
-				// console.log("indise UPPER", letterDivz[w_index-1][l_index].html() ,upperSize.width); // TEST PRINTS
 				y += upperSize.height;
 				lw = upperSize.width;
 				upperw = letterDivz[w_index-1][l_index].style("font-variation-settings");
-				// console.log("indise UPPER", letterDivz[w_index-1][l_index].html() ,upperw); // TEST PRINTS
-
 
 				// update acc_width or init it for new row
 				if (l_index == 0){ acc_width = 0; }
 				else {
-					acc_width += letterDivz[w_index-1][l_index-1].size().width;
-					// acc_width += select('#' + (l_index-1).toString()).size().width;
+					acc_width += letterDivz[w_index-1][l_index-1].size().width; // TODO: also w-1?
 				}
 			}
 			x = margins + acc_width;
 
-			// console.log("inside builder" , int(lw));
 			let l = new Letter(int(x), int(y), int(lw), int(lh), color(testcolors[div_index]), divL, upperw);
 			l.display();
-
 		});
 	});
-
-
-
-
-
-
-	// TEST PRINTS
-	// console.log(divName.html() , "w" , lw, "h", lh);
-	// console.log(divName.html() , "x " , x, "y ", y);
-
 
 	// NOTES:
 	// keeping here for maybe later:
@@ -187,7 +151,6 @@ function draw() {
 	// Dail back on the random.
 	// randomize select one letter to grow (not 2,6)
 	// all the rest - stay in place.
-
 
 	noLoop();
 
@@ -223,24 +186,23 @@ class Letter {
 
 		// div font settings
 		this.div.style('line-height', this.h +'px');
-		this.div.style('font-size', this.h +'px'); //this.h * 0.75;
+		this.div.style('font-size', this.h +'px');
 		// this.div.style('color', this.c);
 		this.div.style('color', 'white'); // test
 		this.div.style('background', this.c); // test
 
 		if (this.varwdth == null){
-			// map w to variable width
-			// console.log("inside letter" , this.w); // TEST
-			// let wmap = map(this.w,int(minw),int(maxw),fontMinWidth,fontMaxWidth,true);
-			let wmap = map(this.w,int(minw),int(maxw),fontMinWidth,fontMaxWidth,true);
+			// map w to variable width in the first row
+
+			let wmap = map(this.w,int(minDivWidth),int(maxDivWidth),fontMinWidth,fontMaxWidth,true);
+			console.log("in", this.w , "map", int(wmap)); // test
 			wmap = "'wdth'"+' '+ int(wmap).toString();
 			this.div.style('font-variation-settings', wmap);
 		} else if (this.varwdth) {
-			// console.log(this.varwdth);
+			// in following rows- use upper variable width
 			this.div.style('font-variation-settings', this.varwdth);
 			this.div.style('width', this.w +'px'); // fill up rest of upper width
 		}
-
 	}
 // end of Letter class
 }
