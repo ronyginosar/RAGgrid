@@ -1,6 +1,6 @@
-// let displayText = "מערכות משטחים"
+let displayText = "מערכות משטחים"
 // let displayText = "abcief ghdjkl";
-let displayText = "abcief ghdjkl".toUpperCase();
+// let displayText = "abcief ghdjkl".toUpperCase();
 
 let bg;
 let margins = 10;
@@ -8,10 +8,10 @@ var logowidth;
 var logoheight;
 
 // Font settings
-let fontMinWidth = 1; // Gingham
-let fontMaxWidth = 150; // Gingham
-// let fontMinWidth = 100; // Marom
-// let fontMaxWidth = 500; // Marom
+// let fontMinWidth = 1; // Gingham
+// let fontMaxWidth = 150; // Gingham
+let fontMinWidth = 100; // Marom
+let fontMaxWidth = 500; // Marom
 let fontMinHeight = 100;
 let fontMaxHeight = 500;
 
@@ -102,6 +102,10 @@ function draw() {
 				maxw = (logowidth - acc_width) * 0.3;
 				// maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
+				// 1. why not random enough?
+				// 2. why not streached?
+				// 3. define logowidth....
+
 
 				lw = int(random(minw, maxw));
 
@@ -164,15 +168,15 @@ class Letter {
 	display(){ // control DOM letters
 		// div size and location
 		// this.div.style('width', this.w +'px'); // TODO - decide if we want this.
-		this.div.style('height', this.h +'px');
+		this.div.style('height', this.h +'px'); // TODO - make font size and h not same thing
 		this.div.position(this.x, this.y);
 
 		// div font settings
 		this.div.style('line-height', this.h +'px');
 		this.div.style('font-size', this.h +'px');
-		// this.div.style('color', this.c);
-		this.div.style('color', 'white'); // test
-		this.div.style('background', this.c); // test
+		this.div.style('color', this.c);
+		// this.div.style('color', 'white'); // test
+		// this.div.style('background', this.c); // test
 
 		if (this.varwdth == null){
 			// map w to variable width in the first row
