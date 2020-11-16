@@ -29,10 +29,13 @@ let fontMinWidth = 100; // Marom
 let fontMaxWidth = 500; // Marom
 let fontMinHeight = 100;
 let fontMaxHeight = 500;
+let fontsize = 150;
 
 // Font changing global vars
 var minDivWidth;
 var maxDivWidth;
+var minDivHeight;
+var maxDivHeight;
 var acc_width = 0; // accumulated width
 var wordLenght; // number of letters in row
 var w = []; // word-letter array of arrays
@@ -56,9 +59,12 @@ function setup() {
 	// logowidth = (fontMaxWidth * 6) ;
 	// console.log(windowWidth , logowidth);
 
-	// calculate div extreme values for wght mapping later
+	// calculate div extreme values for variable mapping later
 	minDivWidth = logowidth * 0.05;
 	maxDivWidth = logowidth * 0.6;
+	minDivHeight = logoheight/2 * 0.1;
+	maxDivHeight = logoheight/2 * 0.7;
+	console.log(minDivHeight , maxDivHeight, logoheight/2);
 
 	// bg = color('rgb(0,0,0)');
 	bg = color('rgb(255,255,255)'); // Test
@@ -103,8 +109,8 @@ function draw() {
 			divL = letterDivz[w_index][l_index];
 
 			// TODO: lh....
-			// lh = random(logoheight * 0.1, logoheight * 0.4);
-			lh = 150;
+			lh = int(random(minDivHeight, maxDivHeight));
+			// lh = 150;
 			y = margins; // 1st row height
 			upperw = null;
 
@@ -115,12 +121,17 @@ function draw() {
 					acc_width += letterDivz[w_index][l_index-1].size().width;
 				}
 
-				minw = logowidth * 0.01 ;
-				maxw = (logowidth + acc_width) * 0.4;  // Note, Think: '+' instead of '-', works better with hebrew?
+				// to remove?
+				// minw = minDivWidth;
+				// // maxw = (logowidth + acc_width) * 0.4;  // Note, Think: '+' instead of '-', works better with hebrew?
+				// maxw = maxDivWidth - acc_width;  // Try
+
+				// can probably get rid of this:
 				// maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// ?? maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
+				// lw = int(random(minw, maxw));
 
-				lw = int(random(minw, maxw));
+				lw = int(random(minDivWidth, maxDivWidth - acc_width));
 
 				// TODO: something here is wrong:
 				// last letter width fills to the end of logosize:
@@ -154,7 +165,7 @@ function draw() {
 		});
 	});
 
-	// noLoop(); // Test
+	noLoop(); // Test
 
 	// ----
 	// Export to SVG
@@ -195,27 +206,40 @@ class Letter {
 	display(){ // control DOM letters
 		// div size and location
 		// this.div.style('width', this.w +'px'); // TODO - decide if we want this.
-		this.div.style('height', this.h +'px'); // TODO - make font size and h not same thing
+		// this.div.style('height', this.h +'px'); // TODO
 		this.div.position(this.x, this.y);
 
 		// div font settings
-		this.div.style('line-height', this.h +'px');
-		this.div.style('font-size', this.h +'px');
+		// this.div.style('line-height', fontsize +'px'); // TODO
+		// this.div.style('font-size', this.h +'px');
+		this.div.style('font-size', fontsize +'px');
 		// this.div.style('color', this.c);
 		this.div.style('color', 'white'); // test
 		this.div.style('background', this.c); // test
+
+		var varsettings = "";
 
 		if (this.varwdth == null){
 			// map w to variable width in the first row
 			let wmap = map(this.w,int(minDivWidth),int(maxDivWidth),fontMinWidth,fontMaxWidth,true);
 			// console.log("in", this.w , "map", int(wmap)); // Test
 			wmap = "'wdth'"+' '+ int(wmap).toString();
-			this.div.style('font-variation-settings', wmap);
+			varsettings += wmap;
+			// this.div.style('font-variation-settings', wmap); // remove
 		} else if (this.varwdth) {
 			// in following rows- use upper variable width
-			this.div.style('font-variation-settings', this.varwdth);
+			varsettings += this.varwdth;
+			// this.div.style('font-variation-settings', this.varwdth);  // remove
 			this.div.style('width', this.w +'px'); // fill up rest of upper width
 		}
+
+		// map h to variable height
+		let hmap = map(this.h,int(minDivHeight),int(maxDivHeight),fontMinHeight,fontMaxHeight,true);
+		hmap = ", "+"'hght'"+' '+ int(hmap).toString();
+		varsettings += hmap;
+
+		// apply var settings
+		this.div.style('font-variation-settings', varsettings);
 	}
 // end of Letter class
 }
