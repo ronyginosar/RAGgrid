@@ -1,3 +1,17 @@
+//****
+// Open Issues:
+// 1. why width not random enough?
+// 2. why last letter not streached to end?
+// 3. define logowidth with fontwidth
+// 4. define the random lw = int(random(minw, maxw)) on fontwidth not logowidth
+// 5. define the random lw = int(random(minw, maxw)) smarter...
+// 6. something is wrong with: last letter width fills to the end of logosize
+// 7. exclude letters that are too narow to stretch
+// 8. animate transitions
+// 9. randomize height
+//****//
+
+
 let displayText = "מערכות משטחים"
 // let displayText = "abcief ghdjkl";
 // let displayText = "abcief ghdjkl".toUpperCase();
@@ -37,7 +51,8 @@ function setup() {
 
 	// TODO decide on how to do this with fontwidth...:
 	maxlogowidth = windowWidth - margins*2 ;
-	logowidth = int(maxlogowidth);
+	// logowidth = int(maxlogowidth);
+	logowidth = 500; // Test
 	// logowidth = (fontMaxWidth * 6) ;
 	// console.log(windowWidth , logowidth);
 
@@ -77,7 +92,7 @@ function setup() {
 function draw() {
 	// inits for every loop
 	background(bg);
-	rect(10,10,logowidth,logoheight);
+	rect(10,10,logowidth,logoheight); // Test
 	widthList = [];
 	acc_width = 0;
 
@@ -99,30 +114,26 @@ function draw() {
 					// acc_width update according to prev letter
 					acc_width += letterDivz[w_index][l_index-1].size().width;
 				}
-				// TODO: should be relyant on fontsize, not logowidth
-				// TODO: how to do smarter?
+
 				minw = logowidth * 0.01 ;
 				maxw = (logowidth + acc_width) * 0.4;  // Note, Think: '+' instead of '-', works better with hebrew?
 				// maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
-				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
-				// 1. why not random enough?
-				// 2. why not streached?
-				// 3. define logowidth....
-
+				// ?? maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 
 				lw = int(random(minw, maxw));
 
+				// TODO: something here is wrong:
 				// last letter width fills to the end of logosize:
 				if(l_index == wordLenght-1){
 					lw = (logowidth - acc_width);
+					// console.log(divL.html(), acc_width , lw); // Test
 				}
 				// console.log(int(minw), int(maxw), lw); // Test
 
 				// TODO is there a letter that is too narow to stretch?
 				// exclude it
-			}
 
-			if (w_index >= 1){ // ammend params for later rows
+			} else if (w_index >= 1){ // ammend params for later rows
 				// y, lw update according to prev row
 				upperSize = letterDivz[w_index-1][l_index].size();
 				y += upperSize.height;
@@ -130,20 +141,20 @@ function draw() {
 				upperw = letterDivz[w_index-1][l_index].style("font-variation-settings");
 
 				// update acc_width or init it for new row
-				if (l_index == 0){ acc_width = 0; }
-				else {
+				if (l_index == 0){ acc_width = 0;
+				} else {
 					acc_width += letterDivz[w_index-1][l_index-1].size().width;
 				}
 			}
 			x = margins + acc_width;
-			console.log(divL.html(), acc_width , lw);
+			// console.log(divL.html(), acc_width , lw);
 
 			let l = new Letter(int(x), int(y), int(lw), int(lh), color(testcolors[div_index]), divL, upperw);
 			l.display();
 		});
 	});
 
-	// noLoop();
+	// noLoop(); // Test
 
 	// ----
 	// Export to SVG
@@ -196,7 +207,6 @@ class Letter {
 
 		if (this.varwdth == null){
 			// map w to variable width in the first row
-
 			let wmap = map(this.w,int(minDivWidth),int(maxDivWidth),fontMinWidth,fontMaxWidth,true);
 			// console.log("in", this.w , "map", int(wmap)); // Test
 			wmap = "'wdth'"+' '+ int(wmap).toString();
