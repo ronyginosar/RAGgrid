@@ -1,7 +1,7 @@
 //****
 // Open Issues:
 // 1. why width not random enough?
-// 2. why last letter not streached to end?
+// 2. why last letter not streached to end? -----> move mapping to creation. the mapping kills the stretch. also for height.
 // 3. define logowidth with fontwidth
 // 4. define the random lw = int(random(minw, maxw)) on fontwidth not logowidth
 // 5. define the random lw = int(random(minw, maxw)) smarter...
@@ -9,6 +9,9 @@
 // 7. exclude letters that are too narow to stretch
 // 8. animate transitions
 // 9. randomize height
+//	// 1. map line-height
+		// 2. strech last line
+// TAKE ALL LOGIC OUT OF LETTER CLASS
 //****//
 
 
@@ -63,8 +66,8 @@ function setup() {
 	minDivWidth = logowidth * 0.05;
 	maxDivWidth = logowidth * 0.6;
 	minDivHeight = logoheight/2 * 0.1;
-	maxDivHeight = logoheight/2 * 0.7;
-	console.log(minDivHeight , maxDivHeight, logoheight/2);
+	maxDivHeight = logoheight/2;
+	// console.log(minDivHeight , maxDivHeight, logoheight/2);
 
 	// bg = color('rgb(0,0,0)');
 	bg = color('rgb(255,255,255)'); // Test
@@ -211,7 +214,6 @@ class Letter {
 
 		// div font settings
 		// this.div.style('line-height', fontsize +'px'); // TODO
-		// this.div.style('font-size', this.h +'px');
 		this.div.style('font-size', fontsize +'px');
 		// this.div.style('color', this.c);
 		this.div.style('color', 'white'); // test
@@ -228,6 +230,8 @@ class Letter {
 			// this.div.style('font-variation-settings', wmap); // remove
 		} else if (this.varwdth) {
 			// in following rows- use upper variable width
+			// note: also copies hght but then we run it over...
+			// TODO: fix this...
 			varsettings += this.varwdth;
 			// this.div.style('font-variation-settings', this.varwdth);  // remove
 			this.div.style('width', this.w +'px'); // fill up rest of upper width
@@ -235,12 +239,24 @@ class Letter {
 
 		// map h to variable height
 		let hmap = map(this.h,int(minDivHeight),int(maxDivHeight),fontMinHeight,fontMaxHeight,true);
-		hmap = ", "+"'hght'"+' '+ int(hmap).toString();
+		// let lineH = int(hmap).toString();
+		// // this.div.style('line-height', lineH +'px'); // TODO
+		hmap = ", "+'"hght"'+' '+ int(hmap).toString();
 		varsettings += hmap;
+
+		// console.log(varsettings);
 
 		// apply var settings
 		this.div.style('font-variation-settings', varsettings);
+
+		// TODO:
+		// 1. map line-height
+		// 2. strech last line
+		let lineH = map(this.h,int(minDivHeight),int(maxDivHeight),100,fontsize,true);
+		lineH = int(lineH).toString();
+		this.div.style('line-height', lineH +'px'); // TODO
 	}
+
 // end of Letter class
 }
 
