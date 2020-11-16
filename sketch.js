@@ -6,6 +6,7 @@ let bg;
 let margins = 10;
 var logowidth;
 var logoheight;
+var playloop;
 
 // Font settings
 // let fontMinWidth = 1; // Gingham
@@ -47,6 +48,7 @@ function setup() {
 	// bg = color('rgb(0,0,0)');
 	bg = color('rgb(255,255,255)'); // Test
 	frameRate(1);
+	playloop = true;
 
 	// 1. input text to array, word per row via space char
 	// TODO make input
@@ -99,8 +101,8 @@ function draw() {
 				}
 				// TODO: should be relyant on fontsize, not logowidth
 				// TODO: how to do smarter?
-				minw = logowidth * 0.05 ;
-				maxw = (logowidth + acc_width) * 0.3;
+				minw = logowidth * 0.01 ;
+				maxw = (logowidth + acc_width) * 0.4;  // Note, Think: '+' instead of '-', works better with hebrew?
 				// maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 				// 1. why not random enough?
@@ -149,6 +151,18 @@ function draw() {
 	// print("saved svg");
 	// noLoop(); // we just want to export once
 
+}
+
+// click to play/pause
+function mouseClicked() {
+	if (playloop){
+		noLoop();
+		playloop = false;
+	}
+	else{
+		loop();
+		playloop = true;
+	}
 }
 
 class Letter {
