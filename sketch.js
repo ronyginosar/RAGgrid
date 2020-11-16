@@ -77,6 +77,7 @@ function draw() {
 	background(bg);
 	rect(10,10,logowidth,logoheight);
 	widthList = [];
+	acc_width = 0;
 
 	// 3. create Letter object for each letter
 	w.reverse().forEach((word, w_index) => {
@@ -99,7 +100,7 @@ function draw() {
 				// TODO: should be relyant on fontsize, not logowidth
 				// TODO: how to do smarter?
 				minw = logowidth * 0.05 ;
-				maxw = (logowidth - acc_width) * 0.3;
+				maxw = (logowidth + acc_width) * 0.3;
 				// maxw = max((logowidth - acc_width) * 0.4, logowidth * 0.1);
 				// maxmax makes sure no one is too narrow, we dont want logowidth - acc_width to be smaller than min
 				// 1. why not random enough?
@@ -129,17 +130,18 @@ function draw() {
 				// update acc_width or init it for new row
 				if (l_index == 0){ acc_width = 0; }
 				else {
-					acc_width += letterDivz[w_index-1][l_index-1].size().width; // TODO: also w-1?
+					acc_width += letterDivz[w_index-1][l_index-1].size().width;
 				}
 			}
 			x = margins + acc_width;
+			console.log(divL.html(), acc_width , lw);
 
 			let l = new Letter(int(x), int(y), int(lw), int(lh), color(testcolors[div_index]), divL, upperw);
 			l.display();
 		});
 	});
 
-	noLoop();
+	// noLoop();
 
 	// ----
 	// Export to SVG
@@ -174,9 +176,9 @@ class Letter {
 		// div font settings
 		this.div.style('line-height', this.h +'px');
 		this.div.style('font-size', this.h +'px');
-		this.div.style('color', this.c);
-		// this.div.style('color', 'white'); // test
-		// this.div.style('background', this.c); // test
+		// this.div.style('color', this.c);
+		this.div.style('color', 'white'); // test
+		this.div.style('background', this.c); // test
 
 		if (this.varwdth == null){
 			// map w to variable width in the first row
