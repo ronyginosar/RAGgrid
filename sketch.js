@@ -6,6 +6,7 @@
 // position 3rd line
 // yod make height like neighboor
 // last letter width: make neighboor letter take some as well if too wide
+// make pixels for w, h according to fontsize since it's pt....
 // ----
 // NTH - make input text
 // NTH - interactive with mouse
@@ -13,6 +14,7 @@
 
 
 let displayText = "מערכות משטחים"
+// let displayText = "מטבחים מערכות מבטחים"
 // let displayText = "מטבחים מערכות מבטחים"
 // let displayText = "abcief ghdjkl";
 // let displayText = "abcief ghdjkl".toUpperCase();
@@ -55,6 +57,7 @@ function setup() {
 	createCanvas(windowWidth, windowHeight);
 	// logoheight = windowHeight - margins*2 ; //test
 	logoheight = 300; //test
+
 
 	// TODO decide on how to do this with fontwidth...:
 	maxlogowidth = windowWidth - margins*2 ;
@@ -184,7 +187,7 @@ function draw() {
 		});
 	});
 
-	// noLoop(); // Test
+	noLoop(); // Test
 
 	// ----
 	// Export to SVG
@@ -251,7 +254,7 @@ class Letter {
 		this.div.style('color', 'black');
 		// this.div.style('color', this.c);
 		// this.div.style('color', 'white'); // test
-		// this.div.style('background', this.c); // test
+		this.div.style('background', this.c); // test
 	}
 
 	animate(){
